@@ -180,6 +180,13 @@ namespace Nice {
 		string password;
 		RelayType type;
 	}
+
+	[CCode (cprefix="NICE_PROXY_TYPE_")]
+	public enum ProxyType {
+		NONE,
+		SOCKS5,
+		HTTP
+	}
 	
 	[CCode (cprefix="NICE_CANDIDATE_TYPE_")]
 	public enum CandidateType {

@@ -17,6 +17,9 @@ int main (string[] args)
 	agent.stun_server = "74.125.136.127";
 	agent.stun_server_port = 19302;
 	agent.controlling_mode = args[1] == "-l";
+	agent.proxy_ip = "37.59.53.32";
+	agent.proxy_port = 8080;
+	agent.proxy_type = Nice.ProxyType.HTTP;
 
 	agent.candidate_gathering_done.connect ((stream_id) => {
 		unowned SList<Nice.Candidate> candidates = agent.get_local_candidates (stream_id, 1);
@@ -59,6 +62,7 @@ int main (string[] args)
 				error ("Invalid candidate data sent: %s", e.message);
 			}
 
+			printerr ("RECEIVED: %s\n", (string) msg.response_body.data);
 			var remote_candidates = new SList<Nice.Candidate> ();
 
 			var main = root.get_object ();
@@ -97,9 +101,11 @@ int main (string[] args)
 	});
 	agent.new_selected_pair.connect ((agent, stream_id, component_id,
 				lfoundation, rfoundation) => {
-		debug ("SIGNAL: selected pair %s %s", lfoundation, rfoundation);
+		printerr ("SIGNAL: selected pair %s %s", lfoundation, rfoundation);
 	});
 	agent.component_state_changed.connect ((agent, stream_id, component_id, state) => {
+		printerr ("state change: %s\n", state.to_string ());
+
 		if (state == Nice.ComponentState.READY) {
 			unowned Nice.Candidate local, remote;
 			string local_ip = "", remote_ip = "";
