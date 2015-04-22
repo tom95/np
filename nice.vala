@@ -40,7 +40,7 @@ int main (string[] args)
 			.printf (ufrag, password, list);
 
 		var session = new Soup.Session ();
-		var msg = new Soup.Message ("GET", "http://localhost:8000/negotiate/%s?id=%s"
+		var msg = new Soup.Message ("GET", "http://cloud.tombeckmann.de:8002/negotiate/%s?id=%s"
 				.printf (agent.controlling_mode ? "create" : "join", id));
 
 		msg.finished.connect (() => {

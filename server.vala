@@ -73,13 +73,7 @@ public class Server : Soup.Server
 		add_handler ("/negotiate/join", negotiate_join);
 	}
 
-	public override void request_finished (Soup.Message msg, Soup.ClientContext context)
-	{
-		print ("REQUEST FINISHED\n");
-		base.request_finished (msg, context);
-	}
-
-	public override void request_aborted (Soup.Message msg, Soup.ClientContext context)
+	/*public override void request_aborted (Soup.Message msg, Soup.ClientContext context)
 	{
 		print ("REQUEST ABORT\n");
 		foreach (var id in sessions.get_keys ()) {
@@ -91,7 +85,7 @@ public class Server : Soup.Server
 		}
 
 		base.request_aborted (msg, context);
-	}
+	}*/
 
 	void negotiate_create (Soup.Server server, Soup.Message msg, string path,
 			HashTable<string,string>? query, Soup.ClientContext client)
