@@ -17,9 +17,9 @@ int main (string[] args)
 	agent.stun_server = "74.125.136.127";
 	agent.stun_server_port = 19302;
 	agent.controlling_mode = args[1] == "-l";
-	agent.proxy_ip = "37.59.53.32";
-	agent.proxy_port = 8080;
-	agent.proxy_type = Nice.ProxyType.HTTP;
+	// agent.proxy_ip = "37.59.53.32";
+	// agent.proxy_port = 8080;
+	// agent.proxy_type = Nice.ProxyType.HTTP;
 
 	agent.candidate_gathering_done.connect ((stream_id) => {
 		unowned SList<Nice.Candidate> candidates = agent.get_local_candidates (stream_id, 1);
@@ -96,6 +96,7 @@ int main (string[] args)
 				error ("Failed to set remote candidates.");
 		});
 
+		printerr ("Waiting for remote to connect ...\n");
 		msg.set_request ("application/json", Soup.MemoryUse.COPY, data.data);
 		session.send_message (msg);
 	});
@@ -126,6 +127,9 @@ int main (string[] args)
 	stream_id = agent.add_stream (1);
 	if (stream_id == 0)
 		error ("Failed to add stream");
+
+	if (!agent.set_relay_info (stream_id, 1, "37.59.53.32", 3478, "tom", "mypw", Nice.RelayType.TCP))
+		error ("Failed to set TURN server info.");
 
 	agent.attach_recv (stream_id, 1, loop.get_context (),
 			(agent, stream_id, component_id, len, buf) => {
